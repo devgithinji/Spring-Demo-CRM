@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @Controller
@@ -36,6 +37,19 @@ public class CustomerController {
     @PostMapping("/saveCustomer")
     public String saveCustomer(@ModelAttribute("customer") Customer customer) {
         customerService.saveCustomer(customer);
+        return "redirect:/customer/list";
+    }
+
+    @GetMapping("/showUpdateForm")
+    public String updateCustomer(@QueryParam("customerId") int customerId, Model model) {
+        Customer customer = customerService.getCustomer(customerId);
+        model.addAttribute("customer", customer);
+        return "customer-form";
+    }
+
+    @GetMapping("/delete")
+    public String deleteCustomer(@QueryParam("customerId") int customerId) {
+        customerService.deleteCustomer(customerId);
         return "redirect:/customer/list";
     }
 
