@@ -5,10 +5,7 @@ import com.densoft.springcrm.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.QueryParam;
 import java.util.List;
@@ -51,6 +48,17 @@ public class CustomerController {
     public String deleteCustomer(@QueryParam("customerId") int customerId) {
         customerService.deleteCustomer(customerId);
         return "redirect:/customer/list";
+    }
+
+    @GetMapping("/search")
+    public String searchCustomers(@QueryParam("theSearchName") String theSearchName,
+                                  Model theModel) {
+        // search customers from the service
+        List<Customer> theCustomers = customerService.searchCustomers(theSearchName);
+
+        // add the customers to the model
+        theModel.addAttribute("customers", theCustomers);
+        return "list-customers";
     }
 
 }
